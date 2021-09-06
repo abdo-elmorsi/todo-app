@@ -1,0 +1,100 @@
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: url(../src/images/01.jpg) no-repeat center fixed;
+  size: cover;
+  min-height: 100vh;
+}
+
+.App {
+  width: 60%;
+  margin: 5% auto;
+  padding: 20px 0;
+  color: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+	text-align: center;
+}
+
+.App h2 {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: #00BCD4;
+}
+
+.App form {
+  width: 80%;
+  margin: auto;
+}
+
+.App form input {
+  padding: 10px 0 10px 10px;
+  outline: none;
+  font-size: 1.2rem;
+  border: none;
+}
+
+.App form input[type="text"] {
+  width: 80%;
+}
+
+.App form input[type="text"]::placeholder {
+  transition: all 0.4s ease;
+  color: #000;
+}
+
+.App form input[type="text"]:focus::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.App form input[type="submit"] {
+  width: 20%;
+  color: #03a9f499;
+  cursor: pointer;
+}
+
+/* ######################################## */
+
+.App ul {
+  list-style: none;
+  width: 80%;
+  margin: 20px auto;
+}
+
+.App ul li {
+  margin: 15px 0;
+  padding: 10px 5px;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  color: #03a9f499;
+}
+
+.App ul li span {
+  font-size: 1.5rem;
+  flex-basis: 40%;
+  text-align: left;
+}
+
+.App ul li button {
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  flex-basis: 18%;
+	border-radius: 5px;
+	padding: 8px 10px;
+}
+
+.App ul li .delete {
+  color: #cddc39b8;
+}
+.App .editB {
+  padding: 8px 10px;
+	margin-top: 10px;
+}
+
+/* ###############	EDIT	############# */

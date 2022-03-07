@@ -1,100 +1,175 @@
 * {
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: url(../src/images/01.jpg) no-repeat center fixed;
-  size: cover;
-  min-height: 100vh;
+    background-image: linear-gradient(120deg, #f6d365, #fda085);
+    color: white;
+    font-family: sans-serif, "Times New Roman", Times, serif;
+    min-height: 100vh;
+}
+.container {
+    max-width: 700px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0 auto;
+}
+header {
+    font-size: 1.5rem;
 }
 
-.App {
-  width: 60%;
-  margin: 5% auto;
-  padding: 20px 0;
-  color: rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
-	text-align: center;
+header,
+form {
+    min-height: 15vh;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+form {
+    margin: 0 auto;
 }
 
-.App h2 {
-  font-size: 2.4rem;
-  font-weight: bold;
-  color: #00BCD4;
+form input,
+form button {
+    padding: 0.5rem;
+    font-size: 2rem;
+    border: none;
+    background: white;
+}
+form input {
+    width: 75%;
+    position: relative;
+}
+form input::placeholder {
+    font-size: 1.1rem;
 }
 
-.App form {
-  width: 80%;
-  margin: auto;
+form button span {
+    font-size: 18px;
+}
+form input:focus {
+    outline: none;
 }
 
-.App form input {
-  padding: 10px 0 10px 10px;
-  outline: none;
-  font-size: 1.2rem;
-  border: none;
+form button {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 25%;
+    border-left: 3px solid #d88771;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #d88771;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.App form input[type="text"] {
-  width: 80%;
+form button:hover {
+    background: #d88771;
+    color: white;
 }
 
-.App form input[type="text"]::placeholder {
-  transition: all 0.4s ease;
-  color: #000;
+.clear-all {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.clear-all .trash-btn {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    margin-left: 5px;
+}
+.todo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.App form input[type="text"]:focus::placeholder {
-  color: rgba(0, 0, 0, 0.4);
+.todo-list {
+    margin-bottom: 50px;
+    width: 100%;
+    list-style: none;
 }
 
-.App form input[type="submit"] {
-  width: 20%;
-  color: #03a9f499;
-  cursor: pointer;
+.todo {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: white;
+    color: black;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.5s ease;
 }
 
-/* ######################################## */
-
-.App ul {
-  list-style: none;
-  width: 80%;
-  margin: 20px auto;
+.todo li {
+    flex: 1;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.todo li span:first-of-type {
+    flex: 2;
+}
+.todo li span:not(:first-of-type) {
+    flex: 1;
 }
 
-.App ul li {
-  margin: 15px 0;
-  padding: 10px 5px;
-  border-radius: 5px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  color: #03a9f499;
+.trash-btn,
+.edit-btn {
+    background: #ff6f47;
+    color: white;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-size: 1rem;
 }
 
-.App ul li span {
-  font-size: 1.5rem;
-  flex-basis: 40%;
-  text-align: left;
+.edit-btn {
+    background: rgb(73, 204, 73);
 }
 
-.App ul li button {
-  font-size: 1.2rem;
-  border: none;
-  cursor: pointer;
-  flex-basis: 18%;
-	border-radius: 5px;
-	padding: 8px 10px;
+.todo-item {
+    padding: 0.5rem;
 }
 
-.App ul li .delete {
-  color: #cddc39b8;
-}
-.App .editB {
-  padding: 8px 10px;
-	margin-top: 10px;
+.fa-check,
+.fa-trash {
+    pointer-events: none;
 }
 
-/* ###############	EDIT	############# */
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.fall {
+    transform: translateY(8rem) rotateZ(20deg);
+    opacity: 0;
+}
+/* update */
+.update {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.update input {
+    width: 50%;
+    font-size: 1rem;
+}
+.update input[type="text"]:last-of-type {
+    border-left: 2px solid #ff6f47;
+}
+
+.update input[type="submit"] {
+    margin: auto;
+    width: 50%;
+    margin-top: 10px;
+}

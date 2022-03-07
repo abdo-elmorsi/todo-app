@@ -1,98 +1,175 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-import CourseForm from "./Component/CourseForm";
-import CourseList from "./Component/CourseList";
-
-class App extends Component {
-  local = {
-    fetch: () => {
-      let Courses = JSON.parse(localStorage.getItem("courses") || "[]");
-      return Courses;
-    },
-    save: (e) => {
-      localStorage.setItem("courses", JSON.stringify(e));
-    },
-  };
-  state = {
-    courses: this.local.fetch(),
-    current: "",
-    placeHolder: "Enter Your Course",
-  };
-
-  componentDidUpdate() {
-    this.local.save(this.state.courses);
-  }
-
-  updateCourse = (e) => {
-    this.setState({
-      current: e.target.value,
+import { BsTrash } from "react-icons/bs";
+import { FaPlusSquare, FaPencilAlt } from "react-icons/fa";
+import UpdateItem from "./components/Update";
+export default function App() {
+    const [name, setName] = useState("");
+    const [price, setprice] = useState("15");
+    const [data, setdata] = useState([]);
+    const [editSt, seteditSt] = useState({
+        isEdit: false,
+        index: 1,
     });
-  };
-  addCourse = (e) => {
-    e.preventDefault();
-    if (this.state.current.trim()) {
-      let current = this.state.current;
-      let courses = this.state.courses;
-      courses.push({ name: current });
-      this.setState({
-        courses,
-        current: "",
-        placeHolder: "Enter Your Course",
-      });
-    } else {
-      this.setState({
-        placeHolder: "You must Write Any Words",
-      });
-    }
-  };
-  DeleteCourse = (index) => {
-    let courses = this.state.courses;
-    courses.splice(index, 1);
-    this.setState({ courses });
-  };
-  editCourse = (index, value) => {
-    let courses = this.state.courses;
-    let course = courses[index];
-    course["name"] = value;
-    this.setState({
-      courses,
-    });
-  };
+    const fetch = () => {
+        let Courses = JSON.parse(localStorage.getItem("courses") || "{}");
+        return Courses;
+    };
+    // fetch data from locale
+    useEffect(() => {
+        setdata(fetch().data);
+        setprice(fetch().price);
+    }, []);
 
-  render() {
-    const courses = this.state.courses;
-    const courseList = courses.map((course, index) => {
-      return (
-        <CourseList
-          details={course}
-          key={index}
-          index={index}
-          DeleteCourse={this.DeleteCourse}
-          editCourse={this.editCourse}
-        />
-      );
-    });
+    // save data in locale
+    useEffect(() => {
+        localStorage.setItem(
+            "courses",
+            JSON.stringify({
+                data,
+                price,
+                id: Math.random().toString(26).slice(2),
+            })
+        );
+    }, [data, price]);
+
+    // save the data
+    const handleSubmt = (e) => {
+        e.preventDefault();
+        if (name.trim().length < 3) {
+            return false;
+        }
+        setdata([
+            ...data,
+            { name, price, id: Math.random().toString(26).slice(2) },
+        ]);
+        setName("");
+    };
+    // handle price
+    const handlePrice = () => {
+        const newPrice = prompt("What is the new price", price) || price;
+        setprice(newPrice);
+    };
+
+    // clear All
+    const clearAll = () => {
+        setdata([]);
+    };
+    // clear Item
+    const clearItem = (e, i) => {
+        let newData = data;
+        const parent = e.target.parentElement;
+        parent.classList.add("fall");
+        // parent.addEventListener("transitionend", (_) => {
+        // parent.remove();
+        setTimeout(() => {
+            newData.splice(i, 1);
+            setdata([...newData]);
+        }, 1000);
+        // });
+        // return clearTimeout(test);
+    };
+
     return (
-      <div className="App">
-        <h2>Abdo Ahmed</h2>
-        <CourseForm
-          placeHolder={this.state.placeHolder}
-          updateCourse={this.updateCourse}
-          addCourse={this.addCourse}
-          Cvalue={this.state.current}
-        />
-        <ul>
-          {courseList.length > 0 ? (
-            courseList
-          ) : (
-            <li>
-              <strong>Sory No Courses</strong>
-            </li>
-          )}
-        </ul>
-      </div>
+        <div className="container">
+            <header>My Todo List</header>
+            <form onSubmit={(e) => handleSubmt(e)}>
+                <input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    type="text"
+                    className="todo-input"
+                    placeholder={`✍️ Add item...`}
+                />
+                <button
+                    onDoubleClick={() => handlePrice()}
+                    className="todo-button"
+                    type="submit"
+                >
+                    <span>{price}</span>
+                    <FaPlusSquare />
+                </button>
+            </form>
+            <div className="clear-all">
+                {data.length > 1 && (
+                    <>
+                        <button title="Total price" className="trash-btn">
+                            {"Total = " +
+                                data
+                                    .map((ele) => ele.price)
+                                    ?.reduce(
+                                        (a, b) => parseInt(a) + parseInt(b),
+                                        0
+                                    )}
+                        </button>
+                        <button
+                            onClick={clearAll}
+                            title="Clear all"
+                            className="trash-btn"
+                        >
+                            <BsTrash />
+                        </button>
+                    </>
+                )}
+            </div>
+            <div className="todo-container">
+                <ul className="todo-list">
+                    {data?.length ? (
+                        data?.map((ele, i) => {
+                            return (
+                                <>
+                                    <div key={ele.id} className=" todo">
+                                        <li className="todo-item">
+                                            <span>{ele?.name}</span>
+                                            <span>/</span>
+                                            <span>{ele?.price}</span>
+                                        </li>
+                                        <button
+                                            onClick={() => {
+                                                seteditSt({
+                                                    isEdit: !editSt.isEdit,
+                                                    index: i,
+                                                });
+                                                console.log(editSt);
+                                            }}
+                                            title="Edit item"
+                                            className="edit-btn"
+                                        >
+                                            <FaPencilAlt />
+                                        </button>
+                                        <button
+                                            onClick={(e) => clearItem(e, i)}
+                                            title="Clear item"
+                                            className="trash-btn"
+                                            style={{
+                                                zIndex: 2,
+                                                position: "relative",
+                                            }}
+                                        >
+                                            <BsTrash
+                                                onClick={(event) =>
+                                                    event.stopPropagation()
+                                                }
+                                            />
+                                        </button>
+                                    </div>
+                                    {true && (
+                                        <UpdateItem
+                                            data={data}
+                                            setdata={setdata}
+                                            editSt={editSt}
+                                            seteditSt={seteditSt}
+                                            index={i}
+                                        />
+                                    )}
+                                </>
+                            );
+                        })
+                    ) : (
+                        <h3>Sorry there is not data</h3>
+                    )}
+                </ul>
+            </div>
+        </div>
     );
-  }
 }
-
-export default App;

@@ -28,7 +28,6 @@ export default function App() {
             JSON.stringify({
                 data,
                 price,
-                id: Math.random().toString(26).slice(2),
             })
         );
     }, [data, price]);

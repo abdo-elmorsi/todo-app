@@ -80,6 +80,7 @@ export default function App() {
                     placeholder={`✍️ Add item...`}
                 />
                 <button
+                    title='DoubleClick to edit'
                     onDoubleClick={() => handlePrice()}
                     className="todo-button"
                     type="submit"

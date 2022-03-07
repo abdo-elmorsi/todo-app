@@ -37,7 +37,7 @@ export default function App() {
         e.preventDefault();
         if (name.trim().length < 3) {
             return false;
-        } else if (data.length === 0) {
+        } else if (data?.length === 0) {
             setdata([{ name, price, id: Math.random().toString(26).slice(2) }]);
         } else {
             setdata([

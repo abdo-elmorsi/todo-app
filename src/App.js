@@ -60,14 +60,10 @@ export default function App() {
         let newData = data;
         const parent = e.target.parentElement;
         parent.classList.add("fall");
-        // parent.addEventListener("transitionend", (_) => {
-        // parent.remove();
         setTimeout(() => {
             newData.splice(i, 1);
             setdata([...newData]);
         }, 1000);
-        // });
-        // return clearTimeout(test);
     };
 
     return (
@@ -91,12 +87,12 @@ export default function App() {
                 </button>
             </form>
             <div className="clear-all">
-                {data.length > 1 && (
+                {data?.length > 1 && (
                     <>
                         <button title="Total price" className="trash-btn">
                             {"Total = " +
                                 data
-                                    .map((ele) => ele.price)
+                                    ?.map((ele) => ele.price)
                                     ?.reduce(
                                         (a, b) => parseInt(a) + parseInt(b),
                                         0

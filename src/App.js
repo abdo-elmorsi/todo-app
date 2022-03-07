@@ -17,8 +17,8 @@ export default function App() {
     };
     // fetch data from locale
     useEffect(() => {
-        setdata(fetch().data);
-        setprice(fetch().price);
+        setdata(fetch().data || []);
+        setprice(fetch().price || "15");
     }, []);
 
     // save data in locale
@@ -115,8 +115,8 @@ export default function App() {
                     {data?.length ? (
                         data?.map((ele, i) => {
                             return (
-                                <>
-                                    <div key={ele.id} className=" todo">
+                                <React.Fragment key={ele.id}>
+                                    <div className="todo">
                                         <li className="todo-item">
                                             <span>{ele?.name}</span>
                                             <span>/</span>
@@ -128,7 +128,6 @@ export default function App() {
                                                     isEdit: !editSt.isEdit,
                                                     index: i,
                                                 });
-                                                console.log(editSt);
                                             }}
                                             title="Edit item"
                                             className="edit-btn"
@@ -160,7 +159,7 @@ export default function App() {
                                             index={i}
                                         />
                                     )}
-                                </>
+                                </React.Fragment>
                             );
                         })
                     ) : (

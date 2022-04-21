@@ -53,7 +53,6 @@ form button span {
 form input:focus {
     outline: none;
 }
-
 form button {
     display: flex;
     align-items: center;
@@ -76,7 +75,7 @@ form button:hover {
 .clear-all {
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
 }
 .clear-all .trash-btn {
     padding-left: 2.5rem;
@@ -96,6 +95,7 @@ form button:hover {
 }
 
 .todo {
+    border-radius: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     background: white;
@@ -105,6 +105,17 @@ form button:hover {
     justify-content: space-between;
     align-items: center;
     transition: all 0.5s ease;
+    overflow: hidden;
+}
+
+.todo .controls {
+    transition: right 0.3s ease-in-out;
+    position: relative;
+    top: 0;
+    right: -48px;
+}
+.todo:hover .controls {
+    right: 0px;
 }
 
 .todo li {
@@ -122,6 +133,7 @@ form button:hover {
 }
 
 .trash-btn,
+.Total,
 .edit-btn {
     background: #ff6f47;
     color: white;
@@ -149,10 +161,10 @@ form button:hover {
     opacity: 0.5;
 }
 
-.fall {
+/* .fall {
     transform: translateY(8rem) rotateZ(20deg);
-    opacity: 0;
-}
+    opacity: 0; 
+} */
 /* update */
 .update {
     display: flex;

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./App.css";
-import { BsTrash } from "react-icons/bs";
-import { FaPlusSquare, FaPencilAlt } from "react-icons/fa";
-import UpdateItem from "./components/Update";
+import { FaPlusSquare } from "react-icons/fa";
+import Todos from "./components/Item";
+export const Tasks = React.createContext();
+export const Update = React.createContext();
+
 export default function App() {
     const [name, setName] = useState("");
     const [price, setprice] = useState("15");
@@ -17,8 +20,9 @@ export default function App() {
     };
     // fetch data from locale
     useEffect(() => {
-        setdata(fetch().data || []);
-        setprice(fetch().price || "15");
+        const { data, price } = fetch();
+        setdata(data || []);
+        setprice(price || "15");
     }, []);
 
     // save data in locale
@@ -35,10 +39,9 @@ export default function App() {
     // save the data
     const handleSubmt = (e) => {
         e.preventDefault();
+        document.querySelector(".todo-input").focus();
         if (name.trim().length < 3) {
             return false;
-        } else if (data?.length === 0) {
-            setdata([{ name, price, id: Math.random().toString(26).slice(2) }]);
         } else {
             setdata([
                 ...data,
@@ -54,119 +57,108 @@ export default function App() {
     };
 
     // clear All
-    const clearAll = () => {
-        setdata([]);
-    };
+    const clearAll = () => setdata([]);
     // clear Item
-    const clearItem = (e, i) => {
+    const clearItem = (_, i) => {
         let newData = data;
-        const parent = e.target.parentElement;
-        parent.classList.add("fall");
-        setTimeout(() => {
-            newData.splice(i, 1);
-            setdata([...newData]);
-        }, 1000);
+        newData.splice(i, 1);
+        setdata([...newData]);
+    };
+
+    // drag and drop
+
+    const onDragEnd = (result) => {
+        const newItems = Array.from(data);
+        const [removed] = newItems.splice(result.source.index, 1);
+        newItems.splice(result?.destination?.index, 0, removed);
+        setdata(newItems);
     };
 
     return (
-        <div className="container">
-            <header>My Todo List</header>
-            <form onSubmit={(e) => handleSubmt(e)}>
-                <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    type="text"
-                    className="todo-input"
-                    placeholder={`✍️ Add item...`}
-                />
-                <button
-                    onDoubleClick={() => handlePrice()}
-                    className="todo-button"
-                    type="submit"
-                >
-                    <span>{price}</span>
-                    <FaPlusSquare />
-                </button>
-            </form>
-            <div className="clear-all">
-                {data?.length > 1 && (
-                    <>
-                        <button title="Total price" className="trash-btn">
-                            {"Total = " +
-                                data
-                                    ?.map((ele) => ele.price)
-                                    ?.reduce(
-                                        (a, b) => parseInt(a) + parseInt(b),
-                                        0
-                                    )}
-                        </button>
+        <Tasks.Provider value={[data, setdata]}>
+            <Update.Provider value={[editSt, seteditSt]}>
+                <div className="container">
+                    <header>My Todo List</header>
+                    {/* form */}
+                    <form onSubmit={(e) => handleSubmt(e)}>
+                        <input
+                            value={name}
+                            name="item_name"
+                            onChange={(e) => setName(e.target.value)}
+                            type="text"
+                            className="todo-input"
+                            placeholder={`✍️ Add item...`}
+                        />
                         <button
-                            onClick={clearAll}
-                            title="Clear all"
-                            className="trash-btn"
+                            onDoubleClick={() => handlePrice()}
+                            className="todo-button"
+                            type="submit"
                         >
-                            <BsTrash />
+                            <span>{price}</span>
+                            <FaPlusSquare />
                         </button>
-                    </>
-                )}
-            </div>
-            <div className="todo-container">
-                <ul className="todo-list">
-                    {data?.length ? (
-                        data?.map((ele, i) => {
-                            return (
-                                <React.Fragment key={ele.id}>
-                                    <div className="todo">
-                                        <li className="todo-item">
-                                            <span>{ele?.name}</span>
-                                            <span>/</span>
-                                            <span>{ele?.price}</span>
-                                        </li>
-                                        <button
-                                            onClick={() => {
-                                                seteditSt({
-                                                    isEdit: !editSt.isEdit,
-                                                    index: i,
-                                                });
-                                            }}
-                                            title="Edit item"
-                                            className="edit-btn"
+                    </form>
+                    {/* title info */}
+                    <div className="clear-all">
+                        {data?.length > 1 && (
+                            <>
+                                <button title="Total price" className="Total">
+                                    {"Total = " +
+                                        data
+                                            ?.map((ele) => ele.price)
+                                            ?.reduce(
+                                                (a, b) =>
+                                                    parseInt(a) + parseInt(b),
+                                                0
+                                            )}
+                                </button>
+                                <button
+                                    onClick={clearAll}
+                                    title="Clear all"
+                                    className="trash-btn"
+                                >
+                                    Clear all
+                                </button>
+                            </>
+                        )}
+                    </div>
+                    {/* todos */}
+                    <div className="todo-container">
+                        <ul className="todo-list">
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                <Droppable droppableId="droppable">
+                                    {(provided) => (
+                                        <div
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
                                         >
-                                            <FaPencilAlt />
-                                        </button>
-                                        <button
-                                            onClick={(e) => clearItem(e, i)}
-                                            title="Clear item"
-                                            className="trash-btn"
-                                            style={{
-                                                zIndex: 2,
-                                                position: "relative",
-                                            }}
-                                        >
-                                            <BsTrash
-                                                onClick={(event) =>
-                                                    event.stopPropagation()
-                                                }
-                                            />
-                                        </button>
-                                    </div>
-                                    {true && (
-                                        <UpdateItem
-                                            data={data}
-                                            setdata={setdata}
-                                            editSt={editSt}
-                                            seteditSt={seteditSt}
-                                            index={i}
-                                        />
+                                            {data.map((item, index) => (
+                                                <Draggable
+                                                    key={item.id}
+                                                    draggableId={item.id}
+                                                    index={index}
+                                                >
+                                                    {(provided, snapshot) => (
+                                                        <Todos
+                                                            provided={provided}
+                                                            snapshot={snapshot}
+                                                            item={item}
+                                                            i={index}
+                                                            clearItem={
+                                                                clearItem
+                                                            }
+                                                        />
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                        </div>
                                     )}
-                                </React.Fragment>
-                            );
-                        })
-                    ) : (
-                        <h3>Sorry there is not data</h3>
-                    )}
-                </ul>
-            </div>
-        </div>
+                                </Droppable>
+                            </DragDropContext>
+                        </ul>
+                    </div>
+                </div>
+            </Update.Provider>
+        </Tasks.Provider>
     );
 }

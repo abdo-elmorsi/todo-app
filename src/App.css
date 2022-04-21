@@ -132,7 +132,6 @@ form button:hover {
     flex: 1;
 }
 
-
 .trash-btn,
 .Total,
 .edit-btn {
@@ -185,4 +184,29 @@ form button:hover {
     margin: auto;
     width: 50%;
     margin-top: 10px;
+}
+
+footer {
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+footer {
+    color: rgb(73, 204, 73);
+}
+footer:hover {
+    color: #ff6f47;
+}
+footer a {
+    color: #ff6f47;
+    text-decoration: none;
+}
+footer:hover a {
+    color: rgb(73, 204, 73);
+}
+footer a:hover {
+    text-decoration: underline;
 }

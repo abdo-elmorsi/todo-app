@@ -158,6 +158,12 @@ export default function App() {
                         </ul>
                     </div>
                 </div>
+                <footer>
+                    Created by{" "}
+                    <a href="https://elmorsy.vercel.app" target={`_blank`}>
+                        Abdo Elmorsy
+                    </a>
+                </footer>
             </Update.Provider>
         </Tasks.Provider>
     );
